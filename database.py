@@ -1,10 +1,16 @@
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from pymongo import MongoClient
+from environ import Environ
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"  # or your postgres url
+DATABASE_URI = Environ.get("DB_URI")
+DATABASE_NAME = Environ.get("DB_NAME")
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+class MongoDBConnection:
+    def __init__(self, db_name):
+        uri = DATABASE_URI
+        self.client = MongoClient(uri)
+        self.db = self.client[db_name]
 
-Base = declarative_base()
+    def get_collection(self, collection_name):
+        return self.db[collection_name]
+
+database = MongoDBConnection(DATABASE_NAME)
