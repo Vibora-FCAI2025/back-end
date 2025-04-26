@@ -4,7 +4,7 @@ from database import database
 
 class Document:
     def __init__(self, collection: str, data=None, required_fields=None):
-        self.collection = database[collection]
+        self.collection = database.get_collection(collection)
         self.data = data or {}
         self.required_fields = required_fields or []
 
@@ -56,7 +56,7 @@ class Document:
         """
         Find multiple documents based on a query
         """
-        documents = database[collection].find(query)
+        documents = database.get_collection(collection).find(query)
         return [cls(collection, doc) for doc in documents]
 
     @classmethod
@@ -64,7 +64,7 @@ class Document:
         """
         Find a single document based on a query
         """
-        document = database[collection].find_one(query)
+        document = database.get_collection(collection).find_one(query)
         if document:
             return cls(collection, document)
         return None
