@@ -1,8 +1,13 @@
 from pymongo import MongoClient
-from environ import Environ
+import environ
 
-DATABASE_URI = Environ.get("DB_URI")
-DATABASE_NAME = Environ.get("DB_NAME")
+# Correct initialization of environ
+env = environ.Env()
+environ.Env.read_env()  # This loads variables from the .env file
+
+DATABASE_URI = env("DB_URI")
+DATABASE_NAME = env("DB_NAME")
+
 
 class MongoDBConnection:
     def __init__(self, db_name):
