@@ -1,3 +1,4 @@
+import bson
 from pydantic import BaseModel, EmailStr, SecretStr
 
 class UserCreate(BaseModel):
@@ -12,4 +13,10 @@ class UserLogin(BaseModel):
 class OTPVerify(BaseModel):
     email: EmailStr
     otp: SecretStr
-    
+
+class User(BaseModel):
+    id: bson.ObjectId
+    email: EmailStr
+    username: str
+    password: SecretStr
+    is_verified: bool
