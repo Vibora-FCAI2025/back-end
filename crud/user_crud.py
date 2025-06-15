@@ -1,30 +1,47 @@
-from typing import List
-from models.user import User, UserCreate, UserUpdate
+from typing import Dict, Any, Optional
+import bson
+from database import database
+from schemas.user_schema import User, UserCreate, UserLogin
 
-fake_db = []
+user_collection = database.get_collection("users")
 
-def get_user_by_id(user_id: int) -> User:
-    return next((user for user in fake_db if user.id == user_id), None)
 
-def get_all_users() -> List[User]:
-    return fake_db
+def create_user(user_data: UserCreate) -> bson.ObjectId:
+    user_dict = {
+        "email": user_data.email,
+        "username": user_data.username,
+        "password": user_data.password.get_secret_value(),
+        "is_verified": False
+    }
+    result = user_collection.insert_one(user_dict)
+    return result.inserted_id
 
-def create_user(user: UserCreate) -> User:
-    new_user = User(id=len(fake_db) + 1, **user.dict())
-    fake_db.append(new_user)
-    return new_user
 
-def update_user(user_id: int, user: UserUpdate) -> User:
-    db_user = get_user_by_id(user_id)
-    if db_user:
-        db_user.name = user.name
-        db_user.email = user.email
-        return db_user
+def find_user_by(filters: Dict[str, Any]) -> Optional[User]:
+    user_doc = user_collection.find_one(filters)
+    if user_doc:
+        return User(
+            id=user_doc["_id"],
+            email=user_doc["email"],
+            username=user_doc["username"],
+            password=user_doc["password"],
+            is_verified=user_doc.get("is_verified", False)
+        )
     return None
 
-def delete_user(user_id: int) -> bool:
-    db_user = get_user_by_id(user_id)
-    if db_user:
-        fake_db.remove(db_user)
-        return True
-    return False
+
+def update_user_by(filters: Dict[str, Any], update_data: Dict[str, Any]) -> bool:
+    result = user_collection.update_one(filters, {"$set": update_data})
+    return result.modified_count > 0
+
+
+def get_user_by_email(email: str) -> Optional[User]:
+    return find_user_by({"email": email})
+
+
+def update_user_by_email(email: str, update_data: Dict[str, Any]) -> bool:
+    return update_user_by({"email": email}, update_data)
+
+
+def verify_user(email: str) -> bool:
+    return update_user_by_email(email, {"is_verified": True})
