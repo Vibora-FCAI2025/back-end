@@ -14,17 +14,17 @@ otp_collection = database.get_collection("otp")
 
 
 def initiate_signup(user_data: UserCreate):
+    hashed_user = hashed_user = NewUser(
+        email=user_data.email,
+        username=user_data.username,
+        password=hash_password(user_data.password.get_secret_value())
+    )
+    create_user(hashed_user)
+
     otp = str(random.randint(100000, 999999))
-
-    user_data_dict = user_data.model_dump()
-    user_data_dict["password"] = hash_password(user_data.password.get_secret_value())
-
     otp_collection.insert_one({
-    "email": user_data.email,
-    "otp": otp,
-    "data": user_data_dict
-})
-
+        "email": user_data.email,
+        "otp": otp})
 
     send_otp_email(user_data.email, otp)
     return otp
@@ -32,7 +32,6 @@ def initiate_signup(user_data: UserCreate):
 def verify_otp(data: OTPVerify):
     record = otp_collection.find_one({"email": data.email, "otp": data.otp})
     if record:
-        create_user(NewUser.model_validate(record["data"]))
         verify_user(data.email)
         otp_collection.delete_one({"_id": record["_id"]})
         return True
