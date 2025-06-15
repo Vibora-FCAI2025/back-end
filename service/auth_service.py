@@ -1,14 +1,15 @@
 import random
 from utils.email import send_otp_email
-from schemas.user_schema import UserCreate
+from schemas.user_schema import UserCreate, NewUser
 from schemas.user_schema import OTPVerify
 from database import database
 from passlib.context import CryptContext
 from passlib.exc import UnknownHashError
-
+from crud.user_crud import create_user, verify_user
 
 otp_collection = database.get_collection("otp")
-user_collection = database.get_collection("users")
+
+
 # service/auth_service.py (or wherever you keep your service logic)
 
 
@@ -31,7 +32,8 @@ def initiate_signup(user_data: UserCreate):
 def verify_otp(data: OTPVerify):
     record = otp_collection.find_one({"email": data.email, "otp": data.otp})
     if record:
-        user_collection.insert_one(record["data"])
+        create_user(NewUser.model_validate(record["data"]))
+        verify_user(data.email)
         otp_collection.delete_one({"_id": record["_id"]})
         return True
     return False
