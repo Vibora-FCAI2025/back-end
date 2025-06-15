@@ -21,7 +21,7 @@ def send_otp(email: str):
 
 def verify_otp(data: OTPVerify) -> bool:
     saved_otp = get_otp(data.email)
-    if saved_otp and saved_otp == data.password:
+    if saved_otp and saved_otp == data.otp:
         verify_user(data.email)
         delete_otp(data.email)
         return True
