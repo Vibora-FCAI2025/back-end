@@ -23,5 +23,5 @@ async def verify_otp(data: OTPVerify):
 
 @router.post("/login")
 def login(user: UserLogin):
-    auth_service.login_user(user)
-    return {"message": "Login successful"}
+    token = auth_service.login_user(user)
+    return {"access_token": token, "token_type": "bearer"}

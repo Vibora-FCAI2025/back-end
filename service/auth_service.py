@@ -1,5 +1,6 @@
 from schemas.user_schema import UserCreate, NewUser, UserLogin
 from utils.auth import hash_password, verify_password
+from utils.jwt import create_access_token
 from fastapi import HTTPException, status
 from crud.user_crud import create_user, get_user_by_email
 from service.otp_service import send_otp
@@ -47,3 +48,4 @@ def login_user(user_data: UserLogin):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid credentials"
         )
+    return create_access_token({"sub": str(user.id)})
