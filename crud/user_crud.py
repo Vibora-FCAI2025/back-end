@@ -1,16 +1,16 @@
 from typing import Dict, Any, Optional
 import bson
 from database import database
-from schemas.user_schema import User, UserCreate, UserLogin
+from schemas.user_schema import User, NewUser
 
 user_collection = database.get_collection("users")
 
 
-def create_user(user_data: UserCreate) -> bson.ObjectId:
+def create_user(user_data: NewUser) -> bson.ObjectId:
     user_dict = {
         "email": user_data.email,
         "username": user_data.username,
-        "password": user_data.password.get_secret_value(),
+        "password": user_data.password,
         "is_verified": False
     }
     result = user_collection.insert_one(user_dict)

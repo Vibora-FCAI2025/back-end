@@ -23,3 +23,9 @@ class User(BaseModel):
 
     class Config:
         arbitrary_types_allowed = True
+
+class NewUser(BaseModel):
+    email: EmailStr
+    username: str
+    password: str
+    is_verified: bool = False
