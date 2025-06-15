@@ -26,7 +26,7 @@ def initiate_signup(user_data: UserCreate):
     otp = str(random.randint(100000, 999999))
 
     user_data_dict = user_data.model_dump()
-    user_data_dict["password"] = hash_password(user_data.password)
+    user_data_dict["password"] = hash_password(user_data.password.get_secret_value())
 
     otp_collection.insert_one({
     "email": user_data.email,

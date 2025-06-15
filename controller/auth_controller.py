@@ -28,7 +28,7 @@ def login(user: UserLogin):
     if not record:
         raise HTTPException(status_code=404, detail="User not found")
 
-    if not auth_service.verify_password(user.password, record["password"]):
+    if not auth_service.verify_password(user.password.get_secret_value(), record["password"]):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     return {"message": "Login successful"}
