@@ -1,6 +1,11 @@
 from passlib.context import CryptContext
 from passlib.exc import UnknownHashError
 
+import bcrypt
+
+if not hasattr(bcrypt, '__about__'):
+    bcrypt.__about__ = type('about', (object,), {'__version__': bcrypt.__version__})
+
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
