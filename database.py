@@ -1,9 +1,4 @@
 from pymongo import MongoClient
-import environ
-
-# Correct initialization of environ
-env = environ.Env()
-environ.Env.read_env()  # This loads variables from the .env file
 
 DATABASE_URI = env("DB_URI")
 DATABASE_NAME = env("DB_NAME")
