@@ -1,7 +1,7 @@
 import random
 from utils.email import send_otp_email
 from schemas.user_schema import UserCreate, NewUser
-from schemas.user_schema import OTPVerify
+from schemas.otp_schema import OTPVerify
 from database import database
 from passlib.context import CryptContext
 from passlib.exc import UnknownHashError

@@ -10,10 +10,6 @@ class UserLogin(BaseModel):
     email: EmailStr
     password: SecretStr
 
-class OTPVerify(BaseModel):
-    email: EmailStr
-    otp: str
-
 class User(BaseModel):
     id: bson.ObjectId
     email: EmailStr
