@@ -12,6 +12,10 @@ class Settings(BaseSettings):
     sender_email: str
     sender_password: str
 
+    jwt_secret_key: str
+    jwt_algorithm: str
+    jwt_expire_minutes: int
+
     model_config = SettingsConfigDict(env_file=".env")
 
 
