@@ -1,7 +1,9 @@
 from pymongo import MongoClient
 
-DATABASE_URI = env("DB_URI")
-DATABASE_NAME = env("DB_NAME")
+from config import get_settings
+
+DATABASE_URI = get_settings().db_uri
+DATABASE_NAME = get_settings().db_name
 
 
 class MongoDBConnection:
