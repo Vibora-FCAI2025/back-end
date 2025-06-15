@@ -12,16 +12,6 @@ user_collection = database.get_collection("users")
 # service/auth_service.py (or wherever you keep your service logic)
 
 
-def insert_user(user_data: UserCreate):
-    # Get the "users" collection from the database
-    collection = database.get_collection('users')
-    
-    # Insert the user data into the "users" collection
-    result = collection.insert_one(user_data.model_dump())
-    
-    return result.inserted_id  # Returns the inserted document's ID
-
-
 def initiate_signup(user_data: UserCreate):
     otp = str(random.randint(100000, 999999))
 
