@@ -1,5 +1,6 @@
 from http.client import HTTPException
 from fastapi import APIRouter
+from crud.user_crud import get_user_by_email
 from schemas.user_schema import UserCreate, UserLogin
 from schemas.otp_schema import OTPVerify
 from service import auth_service
@@ -23,7 +24,7 @@ async def verify_otp(data: OTPVerify):
 
 @router.post("/login")
 def login(user: UserLogin):
-    record = auth_service.user_collection.find_one({"email": user.email})
+    record = get_user_by_email(user.email)
     if not record:
         raise HTTPException(status_code=404, detail="User not found")
 
