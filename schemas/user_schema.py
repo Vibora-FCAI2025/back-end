@@ -12,7 +12,7 @@ class UserLogin(BaseModel):
 
 class OTPVerify(BaseModel):
     email: EmailStr
-    otp: SecretStr
+    otp: str
 
 class User(BaseModel):
     id: bson.ObjectId
