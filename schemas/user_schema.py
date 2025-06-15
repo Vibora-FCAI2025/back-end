@@ -20,3 +20,6 @@ class User(BaseModel):
     username: str
     password: SecretStr
     is_verified: bool
+
+    class Config:
+        arbitrary_types_allowed = True
