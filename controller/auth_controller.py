@@ -4,8 +4,7 @@ from fastapi import APIRouter
 from crud.user_crud import get_user_by_email
 from schemas.user_schema import UserCreate, UserLogin
 from schemas.otp_schema import OTPVerify
-from service.auth_service import initiate_signup
-from service.otp_service import verify_otp
+from service import auth_service, otp_service
 from fastapi import HTTPException
 
 router = APIRouter()
@@ -13,13 +12,13 @@ router = APIRouter()
 
 @router.post("/register")
 def register(user: UserCreate):
-    otp = initiate_signup(user)
+    otp = auth_service.initiate_signup(user)
     return {"message": "OTP sent to your email"}
 
 
 @router.post("/verify-otp")
 async def verify_otp(data: OTPVerify):
-    if verify_otp(data):
+    if otp_service.verify_otp(data):
         return {"message": "User registered successfully"}
     raise HTTPException(status_code=400, detail="Invalid OTP")
 
