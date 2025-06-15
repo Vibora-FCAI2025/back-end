@@ -1,7 +1,5 @@
-from utils.auth import verify_password
 from http.client import HTTPException
 from fastapi import APIRouter
-from crud.user_crud import get_user_by_email
 from schemas.user_schema import UserCreate, UserLogin
 from schemas.otp_schema import OTPVerify
 from service import auth_service, otp_service
