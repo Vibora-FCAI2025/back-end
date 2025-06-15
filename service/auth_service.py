@@ -1,6 +1,5 @@
-from schemas.user_schema import UserCreate, NewUser
-from utils.auth import hash_password
-from crud.user_crud import create_user
+from schemas.user_schema import UserCreate, NewUser, UserLogin
+from utils.auth import hash_password, verify_password
 from fastapi import HTTPException, status
 from crud.user_crud import create_user, get_user_by_email
 from service.otp_service import send_otp
@@ -27,3 +26,24 @@ def initiate_signup(user_data: UserCreate):
     )
     create_user(hashed_user)
     send_otp(user_data.email)
+
+
+def login_user(user_data: UserLogin):
+    user = get_user_by_email(user_data.email)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+
+    if not user.is_verified:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="User not verified"
+        )
+
+    if not verify_password(user_data.password.get_secret_value(), user.password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid credentials"
+        )
