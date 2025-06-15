@@ -9,7 +9,7 @@ from crud.otp_crud import create_otp, get_otp, delete_otp
 
 
 def initiate_signup(user_data: UserCreate):
-    hashed_user = hashed_user = NewUser(
+    hashed_user = NewUser(
         email=user_data.email,
         username=user_data.username,
         password=hash_password(user_data.password.get_secret_value())
