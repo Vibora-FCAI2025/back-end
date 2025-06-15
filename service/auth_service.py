@@ -8,7 +8,7 @@ from crud.user_crud import create_user, verify_user
 from crud.otp_crud import create_otp, get_otp, delete_otp
 
 
-def initiate_signup(user_data: UserCreate):
+def initiate_signup(user_data: UserCreate) -> str:
     hashed_user = NewUser(
         email=user_data.email,
         username=user_data.username,
@@ -23,7 +23,7 @@ def initiate_signup(user_data: UserCreate):
     return otp
 
 
-def verify_otp(data: OTPVerify):
+def verify_otp(data: OTPVerify) -> bool:
     saved_otp = get_otp(data.email)
     if saved_otp and saved_otp == data.password:
         verify_user(data.email)
