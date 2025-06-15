@@ -25,14 +25,5 @@ async def verify_otp(data: OTPVerify):
 
 @router.post("/login")
 def login(user: UserLogin):
-    record = get_user_by_email(user.email)
-    if not record:
-        raise HTTPException(status_code=404, detail="User not found")
-
-    if not record["is_verified"]:
-        raise HTTPException(status_code=401, detail="User not verified")
-
-    if not verify_password(user.password.get_secret_value(), record["password"]):
-        raise HTTPException(status_code=401, detail="Invalid credentials")
-
+    auth_service.login_user(user)
     return {"message": "Login successful"}
