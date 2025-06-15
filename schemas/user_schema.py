@@ -18,7 +18,7 @@ class User(BaseModel):
     id: bson.ObjectId
     email: EmailStr
     username: str
-    password: SecretStr
+    password: str
     is_verified: bool
 
     class Config:
