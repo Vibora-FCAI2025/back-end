@@ -1,15 +1,15 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, SecretStr
 
 class UserCreate(BaseModel):
-    email: str
+    email: EmailStr
     username: str
-    password: str
+    password: SecretStr
 
 class UserLogin(BaseModel):
-    email: str
-    password: str
+    email: EmailStr
+    password: SecretStr
 
 class OTPVerify(BaseModel):
     email: EmailStr
-    otp: str
+    otp: SecretStr
     
