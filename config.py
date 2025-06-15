@@ -7,6 +7,11 @@ class Settings(BaseSettings):
     db_name: str
     db_uri: str
 
+    smtp_server: str
+    smtp_port: str
+    sender_email: str
+    sender_password: str
+
     model_config = SettingsConfigDict(env_file=".env")
 
 
