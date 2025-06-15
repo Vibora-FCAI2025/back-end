@@ -1,10 +1,9 @@
 from http.client import HTTPException
-from fastapi import APIRouter, UploadFile
+from fastapi import APIRouter
 from schemas.user_schema import UserCreate, UserLogin
-from schemas.match_schema import MatchResponse
+from schemas.otp_schema import OTPVerify
 from service import auth_service
 from fastapi import HTTPException
-from schemas.user_schema import OTPVerify
 
 router = APIRouter()
 
