@@ -1,6 +1,6 @@
 from fastapi import APIRouter, UploadFile, Depends
 from dependencies.auth import is_auth
-from schemas.match_schema import MatchResponse
+from schemas.match_schema import MatchResponse, VideoStatusUpdate
 from schemas.user_schema import User
 
 router = APIRouter()
@@ -12,7 +12,7 @@ def get_upload(user: User = Depends(is_auth)):
 
 
 @router.post("/update-status")
-def update_status(user: User = Depends(is_auth)):
+def update_status(video_data: VideoStatusUpdate,user: User = Depends(is_auth)):
     pass
 
 

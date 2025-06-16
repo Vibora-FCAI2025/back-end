@@ -1,5 +1,10 @@
 from pydantic import BaseModel
-from typing import Any
+from typing import Any, Literal
+
+
+class VideoStatusUpdate(BaseModel):
+    video_id: str
+    status: Literal["queued", "processing", "finished"]
 
 class MatchResponse(BaseModel):
     id: int
