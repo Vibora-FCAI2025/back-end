@@ -39,6 +39,10 @@ def get_user_by_email(email: str) -> Optional[User]:
     return find_user_by({"email": email})
 
 
+def get_user_by_id(user_id: str) -> Optional[User]:
+    return find_user_by({"_id": bson.ObjectId(user_id)})
+
+
 def update_user_by_email(email: str, update_data: Dict[str, Any]) -> bool:
     return update_user_by({"email": email}, update_data)
 
