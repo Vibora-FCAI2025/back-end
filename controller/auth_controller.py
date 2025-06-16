@@ -1,4 +1,3 @@
-from http.client import HTTPException
 from fastapi import APIRouter
 from schemas.user_schema import UserRegister, UserLogin
 from schemas.otp_schema import OTPVerify
