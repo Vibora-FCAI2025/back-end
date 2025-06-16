@@ -1,4 +1,4 @@
-from schemas.user_schema import UserCreate, NewUser, UserLogin
+from schemas.user_schema import UserRegister, NewUser, UserLogin
 from utils.auth import hash_password, verify_password
 from utils.jwt import create_access_token
 from fastapi import HTTPException, status
@@ -13,7 +13,7 @@ def check_user_exists(email: str):
     return False
 
 
-def initiate_signup(user_data: UserCreate):
+def initiate_signup(user_data: UserRegister):
     if check_user_exists(user_data.email):
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,

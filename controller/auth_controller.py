@@ -1,6 +1,6 @@
 from http.client import HTTPException
 from fastapi import APIRouter
-from schemas.user_schema import UserCreate, UserLogin
+from schemas.user_schema import UserRegister, UserLogin
 from schemas.otp_schema import OTPVerify
 from service import auth_service, otp_service
 from fastapi import HTTPException
@@ -9,7 +9,7 @@ router = APIRouter()
 
 
 @router.post("/register")
-def register(user: UserCreate):
+def register(user: UserRegister):
     otp = auth_service.initiate_signup(user)
     return {"message": "OTP sent to your email"}
 

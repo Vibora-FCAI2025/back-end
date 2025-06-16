@@ -1,7 +1,7 @@
 import bson
 from pydantic import BaseModel, EmailStr, SecretStr
 
-class UserCreate(BaseModel):
+class UserRegister(BaseModel):
     email: EmailStr
     username: str
     password: SecretStr
