@@ -21,7 +21,11 @@ async def verify_otp(data: OTPVerify):
     raise HTTPException(status_code=400, detail="Invalid OTP")
 
 
-@router.post("/login")
+@router.post("/login", responses={
+    401: {"description": "Invalid credentials"},
+    403: {"description": "User not verified"},
+    404: {"description": "User not found"}
+})
 def login(user: UserLogin):
     token = auth_service.login_user(user)
     return {"access_token": token, "token_type": "bearer"}
