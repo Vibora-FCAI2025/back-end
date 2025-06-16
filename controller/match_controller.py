@@ -4,6 +4,16 @@ from schemas.match_schema import MatchResponse
 router = APIRouter()
 
 
+@router.get("/get-upload")
+def get_upload():
+    return {"upload-url": "http://upload.com"}
+
+
+@router.post("/update-status")
+def update_status():
+    pass
+
+
 @router.post("/analyse_video/")
 def analyse_video(video_file: UploadFile):
     # logic to analyze video
