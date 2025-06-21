@@ -5,7 +5,7 @@ from schemas.match_schema import MatchResponse, MatchStatusUpdate, MatchAnalysis
 from schemas.user_schema import User
 from service.analysis_service import analyze_match
 from service.match_service import change_match_status
-from service.upload_service import generate_upload_url, generate_download_url
+from service.upload_service import generate_upload_url
 
 router = APIRouter()
 
@@ -18,7 +18,9 @@ def get_upload(user: User = Depends(is_auth)):
             "video_id": video_id}
 
 
-@router.post("/update-status")
+@router.post("/update-status", responses={
+    401: {"description": "Unauthorized Access"}
+})
 def update_status(video_data: MatchStatusUpdate, user: User = Depends(is_auth)):
     change_match_status(video_data, user)
     return "Status changed successfully"
