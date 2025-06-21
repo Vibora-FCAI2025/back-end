@@ -9,7 +9,7 @@ def change_match_status(match_status: MatchStatusUpdate, user: User):
     if not match:
         raise HTTPException(status_code=404, detail="Match not found")
     if match.user_id != user.id:
-        raise HTTPException(status_code=401, detail="Unauthorized Access")
+        raise HTTPException(status_code=403, detail="Forbidden")
     update_match_status(str(match_status.match_id), match_status.status)
 
 
