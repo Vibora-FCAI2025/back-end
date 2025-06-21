@@ -1,14 +1,17 @@
+import bson
 from fastapi import APIRouter, UploadFile, Depends
 from dependencies.auth import is_auth
 from schemas.match_schema import MatchResponse, VideoStatusUpdate
 from schemas.user_schema import User
+from service.upload_service import generate_upload_url, generate_download_url
 
 router = APIRouter()
 
 
 @router.get("/get-upload")
 def get_upload(user: User = Depends(is_auth)):
-    return {"upload-url": "http://upload.com"}
+    upload_url = generate_upload_url(bson.ObjectId())
+    return {"upload-url": upload_url}
 
 
 @router.post("/update-status")
