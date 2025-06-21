@@ -24,7 +24,7 @@ class Match(BaseModel):
     user_id: bson.ObjectId
     date: datetime
     status: Literal["queued", "processing", "finished"]
-    video_url: Optional[str] = None
+    video_url: str
     annotated_url: Optional[str] = None
     data_url: Optional[str] = None
 
