@@ -27,3 +27,8 @@ class Match(BaseModel):
     video_url: Optional[str] = None
     annotated_url: Optional[str] = None
     data_url: Optional[str] = None
+
+class MatchCreate(BaseModel):
+    video_id: bson.ObjectId
+    user_id: bson.ObjectId
+    date: datetime
