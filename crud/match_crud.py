@@ -27,7 +27,7 @@ def get_matches_by_user(user_id: str) -> List[Match]:
     return [Match(**m) for m in matches]
 
 
-def update_match_status(match_id: MatchStatusUpdate, new_status: Literal["queued", "processing", "finished"]) -> bool:
+def update_match_status(match_id: str, new_status: Literal["queued", "processing", "finished"]) -> bool:
     result = match_collection.update_one(
         {"_id": ObjectId(match_id)},
         {"$set": {"status": new_status}},
