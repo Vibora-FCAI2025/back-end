@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from typing import Any, Literal, List, Optional
 
 
-class VideoStatusUpdate(BaseModel):
+class MatchStatusUpdate(BaseModel):
     video_id: str
     status: Literal["queued", "processing", "finished"]
 

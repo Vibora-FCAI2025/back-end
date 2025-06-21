@@ -1,7 +1,7 @@
 import bson
 from fastapi import APIRouter, Depends
 from dependencies.auth import is_auth
-from schemas.match_schema import MatchResponse, VideoStatusUpdate, MatchAnalysisRequest
+from schemas.match_schema import MatchResponse, MatchStatusUpdate, MatchAnalysisRequest
 from schemas.user_schema import User
 from service.upload_service import generate_upload_url, generate_download_url
 
@@ -17,7 +17,7 @@ def get_upload(user: User = Depends(is_auth)):
 
 
 @router.post("/update-status")
-def update_status(video_data: VideoStatusUpdate, user: User = Depends(is_auth)):
+def update_status(video_data: MatchStatusUpdate, user: User = Depends(is_auth)):
     pass
 
 
