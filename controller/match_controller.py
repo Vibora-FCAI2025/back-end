@@ -3,6 +3,8 @@ from fastapi import APIRouter, Depends
 from dependencies.auth import is_auth
 from schemas.match_schema import MatchResponse, MatchStatusUpdate, MatchAnalysisRequest
 from schemas.user_schema import User
+from service.analysis_service import analyze_match
+from service.match_service import change_match_status
 from service.upload_service import generate_upload_url, generate_download_url
 
 router = APIRouter()
@@ -18,13 +20,14 @@ def get_upload(user: User = Depends(is_auth)):
 
 @router.post("/update-status")
 def update_status(video_data: MatchStatusUpdate, user: User = Depends(is_auth)):
-    pass
+    change_match_status(video_data, user)
+    return "Status changed successfully"
 
 
 @router.post("/analyse_video")
 def analyse_video(match: MatchAnalysisRequest, user: User = Depends(is_auth)):
-    # logic to analyze video
-    return {"message": "Video analyzed"}
+    match_id = analyze_match(match, user)
+    return {"match_id": match_id}
 
 
 @router.get("/match_history", response_model=list[MatchResponse])
