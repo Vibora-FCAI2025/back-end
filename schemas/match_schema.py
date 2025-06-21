@@ -6,7 +6,7 @@ from typing import Any, Literal, List, Optional
 
 
 class MatchStatusUpdate(BaseModel):
-    video_id: str
+    match_id: bson.ObjectId
     status: Literal["queued", "processing", "finished"]
 
 class MatchResponse(BaseModel):
