@@ -1,5 +1,6 @@
+import bson
 from pydantic import BaseModel
-from typing import Any, Literal
+from typing import Any, Literal, List
 
 
 class VideoStatusUpdate(BaseModel):
@@ -10,3 +11,7 @@ class MatchResponse(BaseModel):
     id: int
     data: Any
     annotated_video_url: str
+
+class Match(BaseModel):
+    video_id: bson.ObjectId
+    keypoints: List[List[int, int]]
