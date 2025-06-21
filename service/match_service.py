@@ -19,10 +19,10 @@ def get_matches(user: User):
 
 
 # In services/match_service.py
-def get_user_match(match_id: str, user_id: str) -> Match:
+def get_user_match(match_id: str, user: User) -> Match:
     match = get_match_by_id(match_id)
     if not match:
         raise HTTPException(status_code=404, detail="Match not found")
-    if match.user_id != user_id:
+    if match.user_id != user.id:
         raise HTTPException(status_code=403, detail="Forbidden")
     return match
