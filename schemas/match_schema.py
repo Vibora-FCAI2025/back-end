@@ -10,7 +10,7 @@ class MatchStatusUpdate(BaseModel):
     status: Literal["queued", "processing", "finished"]
 
 class MatchResponse(BaseModel):
-    id: int
+    id: bson.ObjectId
     data: Any
     annotated_video_url: str
 
