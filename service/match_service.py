@@ -5,10 +5,12 @@ from schemas.user_schema import User
 
 
 def change_match_status(match_status: MatchStatusUpdate, user: User):
-    if get_match_by_id(str(match_status.match_id)).user_id == user.id:
-        update_match_status(str(match_status.match_id), match_status.status)
-    else:
+    match = get_match_by_id(str(match_status.match_id))
+    if not match:
+        raise HTTPException(status_code=404, detail="Match not found")
+    if match.user_id != user.id:
         raise HTTPException(status_code=401, detail="Unauthorized Access")
+    update_match_status(str(match_status.match_id), match_status.status)
 
 
 def get_matches(user: User):
