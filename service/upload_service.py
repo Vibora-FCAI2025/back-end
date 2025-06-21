@@ -9,7 +9,11 @@ settings = get_settings()
 
 @lru_cache()
 def get_s3_client():
-    return boto3.client('s3')
+    return boto3.client('s3',
+                        aws_access_key_id=settings.aws_access_key_id,
+                        aws_secret_access_key=settings.aws_secret_access_key,
+                        region_name=settings.aws_default_region
+                        )
 
 
 def generate_upload_url(object_key, expiration=3600):
