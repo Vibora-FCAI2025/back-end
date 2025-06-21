@@ -32,3 +32,4 @@ class MatchCreate(BaseModel):
     video_id: bson.ObjectId
     user_id: bson.ObjectId
     date: datetime
+    video_url: str
