@@ -19,6 +19,10 @@ class Settings(BaseSettings):
     aws_access_key_id: str
     aws_secret_access_key: str
     aws_s3_videos_bucket: str
+    aws_default_region: str
+
+    analysis_cli_server:str
+    analysis_cli_port:str
 
     model_config = SettingsConfigDict(env_file=".env")
 
