@@ -1,6 +1,8 @@
+from datetime import datetime
+
 import bson
 from pydantic import BaseModel
-from typing import Any, Literal, List
+from typing import Any, Literal, List, Optional
 
 
 class VideoStatusUpdate(BaseModel):
@@ -15,3 +17,13 @@ class MatchResponse(BaseModel):
 class MatchAnalysisRequest(BaseModel):
     video_id: bson.ObjectId
     keypoints: List[List[int, int]]
+
+class Match(BaseModel):
+    id: bson.ObjectId
+    video_id: bson.ObjectId
+    user_id: bson.ObjectId
+    date: datetime
+    status: Literal["queued", "processing", "finished"]
+    video_url: Optional[str] = None
+    annotated_url: Optional[str] = None
+    data_url: Optional[str] = None
