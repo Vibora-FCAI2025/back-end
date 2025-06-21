@@ -1,10 +1,11 @@
 import bson
+from typing import List
 from fastapi import APIRouter, Depends
 from dependencies.auth import is_auth
-from schemas.match_schema import MatchResponse, MatchStatusUpdate, MatchAnalysisRequest
+from schemas.match_schema import MatchResponse, MatchStatusUpdate, MatchAnalysisRequest, Match
 from schemas.user_schema import User
 from service.analysis_service import analyze_match
-from service.match_service import change_match_status
+from service.match_service import change_match_status, get_matches, get_user_match
 from service.upload_service import generate_upload_url
 
 router = APIRouter()
@@ -32,13 +33,11 @@ def analyse_video(match: MatchAnalysisRequest, user: User = Depends(is_auth)):
     return {"match_id": match_id}
 
 
-@router.get("/match_history", response_model=list[MatchResponse])
+@router.get("/match_history", response_model=List[Match])
 def get_match_history(user: User = Depends(is_auth)):
-    # logic to return match history
-    return []
+    return get_matches(user)
 
 
-@router.get("/match/{match_name}", response_model=MatchResponse)
-def get_match(match_name: str, user: User = Depends(is_auth)):
-    # logic to return specific match
-    return {"id": 1, "data": {}, "annotated_video_url": "http://example.com/video.mp4"}
+@router.get("/match/{match_id}", response_model=Match)
+def get_match(match_id: str, user: User = Depends(is_auth)):
+    return get_user_match(match_id, user)
