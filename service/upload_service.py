@@ -18,27 +18,19 @@ def get_s3_client():
 
 def generate_upload_url(object_key, expiration=3600):
     s3_client = get_s3_client()
-    try:
-        response = s3_client.generate_presigned_url(
-            'put_object',
-            Params={'Bucket': settings.aws_s3_videos_bucket, 'Key': str(object_key)},
-            ExpiresIn=expiration
-        )
-        return response
-    except ClientError as e:
-        print(f"Error generating upload URL: {e}")
-        return None
+    response = s3_client.generate_presigned_url(
+        'put_object',
+        Params={'Bucket': settings.aws_s3_videos_bucket, 'Key': str(object_key)},
+        ExpiresIn=expiration
+    )
+    return response
 
 
 def generate_download_url(object_key, expiration=3600):
     s3_client = get_s3_client()
-    try:
-        response = s3_client.generate_presigned_url(
-            'get_object',
-            Params={'Bucket': settings.bucket_name, 'Key': object_key},
-            ExpiresIn=expiration
-        )
-        return response
-    except ClientError as e:
-        print(f"Error generating download URL: {e}")
-        return None
+    response = s3_client.generate_presigned_url(
+        'get_object',
+        Params={'Bucket': settings.bucket_name, 'Key': object_key},
+        ExpiresIn=expiration
+    )
+    return response
