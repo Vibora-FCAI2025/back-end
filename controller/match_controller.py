@@ -1,7 +1,7 @@
 import bson
 from fastapi import APIRouter, Depends
 from dependencies.auth import is_auth
-from schemas.match_schema import MatchResponse, VideoStatusUpdate, Match
+from schemas.match_schema import MatchResponse, VideoStatusUpdate, MatchAnalysisRequest
 from schemas.user_schema import User
 from service.upload_service import generate_upload_url, generate_download_url
 
@@ -22,7 +22,7 @@ def update_status(video_data: VideoStatusUpdate, user: User = Depends(is_auth)):
 
 
 @router.post("/analyse_video")
-def analyse_video(match: Match, user: User = Depends(is_auth)):
+def analyse_video(match: MatchAnalysisRequest, user: User = Depends(is_auth)):
     # logic to analyze video
     return {"message": "Video analyzed"}
 

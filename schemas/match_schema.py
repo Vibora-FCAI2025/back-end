@@ -12,6 +12,6 @@ class MatchResponse(BaseModel):
     data: Any
     annotated_video_url: str
 
-class Match(BaseModel):
+class MatchAnalysisRequest(BaseModel):
     video_id: bson.ObjectId
     keypoints: List[List[int, int]]
