@@ -21,7 +21,7 @@ def update_status(video_data: VideoStatusUpdate, user: User = Depends(is_auth)):
     pass
 
 
-@router.post("/analyse_video/")
+@router.post("/analyse_video")
 def analyse_video(match: Match, user: User = Depends(is_auth)):
     # logic to analyze video
     return {"message": "Video analyzed"}
