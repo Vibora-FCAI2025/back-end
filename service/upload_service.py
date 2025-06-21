@@ -17,9 +17,6 @@ def get_s3_client():
 
 
 def generate_upload_url(object_key, expiration=3600):
-    """
-    Generate a presigned URL for uploading a file to S3
-    """
     s3_client = get_s3_client()
     try:
         response = s3_client.generate_presigned_url(
