@@ -1,9 +1,16 @@
 from datetime import datetime
+from typing import List
 
-from crud.match_crud import create_match
-from schemas.match_schema import MatchAnalysisRequest, MatchCreate
+import requests
+
+from config import get_settings
+from crud.match_crud import create_match, get_match_by_id
+from schemas.match_schema import MatchAnalysisRequest, MatchCreate, Match
 from schemas.user_schema import User
 from service.upload_service import generate_download_url
+from utils.jwt import create_access_token
+
+settings = get_settings()
 
 
 def analyze_match(match: MatchAnalysisRequest, user: User):
@@ -15,8 +22,35 @@ def analyze_match(match: MatchAnalysisRequest, user: User):
     )
 
     match_id = create_match(match_create)
-
-    # send analysis request
+    match = get_match_by_id(match_id)
+    send_analysis_request(match, match.keypoints)
 
     return match_id
 
+
+def send_analysis_request(match: Match, keypoints: List[List[int, int]]) -> dict:
+    token = create_access_token(
+        {"iss": "backend", "aud": "cli", "scope": "internal"},
+        use_internal=True
+    )
+
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json"
+    }
+    url = f"{settings.analysis_cli_server}:{settings.analysis_cli_port}/analyze"
+
+    response = requests.post(
+        url,
+        headers=headers,
+        json={
+            "user_id": match.user_id,
+            "video_id": match.video_id,
+            "video_path": match.video_url,
+            "court_points": keypoints
+        },
+        timeout=10
+    )
+
+    response.raise_for_status()
+    return response.json()
