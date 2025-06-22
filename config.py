@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     sender_password: str
 
     jwt_secret_key: str
+    internal_jwt_secret_key: str
     jwt_algorithm: str
     jwt_expire_minutes: int
 
