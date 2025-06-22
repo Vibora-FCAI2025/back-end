@@ -22,8 +22,8 @@ class Settings(BaseSettings):
     aws_s3_videos_bucket: str
     aws_default_region: str
 
-    analysis_cli_server:str
-    analysis_cli_port:str
+    analysis_cli_server: str
+    analysis_cli_port: str
 
     model_config = SettingsConfigDict(env_file=".env")
 
