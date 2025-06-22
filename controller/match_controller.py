@@ -2,6 +2,7 @@ import bson
 from typing import List
 from fastapi import APIRouter, Depends
 from dependencies.auth import is_auth
+from dependencies.internal import is_internal
 from schemas.match_schema import MatchResponse, MatchStatusUpdate, MatchAnalysisRequest, Match
 from schemas.user_schema import User
 from service.analysis_service import analyze_match
@@ -22,8 +23,8 @@ def get_upload(user: User = Depends(is_auth)):
 @router.post("/update-status", responses={
     401: {"description": "Unauthorized Access"}
 })
-def update_status(video_data: MatchStatusUpdate, user: User = Depends(is_auth)):
-    change_match_status(video_data, user)
+def update_status(video_data: MatchStatusUpdate, auth=Depends(is_internal)):
+    change_match_status(video_data)
     return "Status changed successfully"
 
 
