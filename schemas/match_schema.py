@@ -11,7 +11,7 @@ class MatchStatusUpdate(BaseModel):
     status: MATCH_STATUS
 
 class MatchAnalysisRequest(BaseModel):
-    video_id: bson.ObjectId
+    video_id: str
     keypoints: List[List[int, int]]
 
 class Match(BaseModel):

@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import List
 
 import requests
+from bson import ObjectId
 
 from config import get_settings
 from crud.match_crud import create_match, get_match_by_id
@@ -15,7 +16,7 @@ settings = get_settings()
 
 def analyze_match(match: MatchAnalysisRequest, user: User):
     match_create = MatchCreate(
-        video_id=match.video_id,
+        video_id=ObjectId(match.video_id),
         user_id=user.user_id,
         date=datetime.now(),
         download_url=generate_download_url(match.video_id)
