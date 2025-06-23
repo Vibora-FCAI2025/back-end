@@ -2,7 +2,7 @@ from datetime import datetime
 
 import bson
 from pydantic import BaseModel
-from typing import Any, Literal, List, Optional
+from typing import Literal, List, Optional
 
 MATCH_STATUS = Literal["pending", "queued", "processing", "finished"]
 
