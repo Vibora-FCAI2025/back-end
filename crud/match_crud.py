@@ -11,6 +11,7 @@ match_collection = database.get_collection("matches")
 def create_match(data: MatchCreate) -> str:
     match_dict = data.model_dump()
     match_dict["date"] = match_dict.get("date", datetime.now())
+    match_dict["status"] = "pending"
     result = match_collection.insert_one(match_dict)
     return str(result.inserted_id)
 
