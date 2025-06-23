@@ -30,10 +30,7 @@ def analyze_match(analysis: MatchAnalysisRequest, user: User):
 
 
 def send_analysis_request(match: Match, keypoints: List[List[int]]) -> dict:
-    token = create_access_token(
-        {"iss": "backend", "aud": "cli", "scope": "internal"},
-        use_internal=True
-    )
+    token = create_access_token({}, use_internal=True)
 
     headers = {
         "Authorization": f"Bearer {token}",
