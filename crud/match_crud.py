@@ -1,8 +1,7 @@
-from pymongo.collection import Collection
 from bson import ObjectId
 from typing import Optional, List, Dict, Any
 from database import database
-from schemas.match_schema import MatchCreate, Match, MatchStatusUpdate, MATCH_STATUS
+from schemas.match_schema import MatchCreate, Match, MATCH_STATUS
 from datetime import datetime
 
 match_collection = database.get_collection("matches")
