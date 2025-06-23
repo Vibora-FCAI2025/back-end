@@ -39,7 +39,7 @@ def send_analysis_request(match: Match, keypoints: List[List[int]]) -> dict:
         "Authorization": f"Bearer {token}",
         "Content-Type": "application/json"
     }
-    url = f"{settings.analysis_cli_server}:{settings.analysis_cli_port}/analyze"
+    url = f"http://{settings.analysis_cli_server}:{settings.analysis_cli_port}/analyze"
 
     response = requests.post(
         url,
