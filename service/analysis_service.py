@@ -29,7 +29,7 @@ def analyze_match(match: MatchAnalysisRequest, user: User):
     return match_id
 
 
-def send_analysis_request(match: Match, keypoints: List[List[int, int]]) -> dict:
+def send_analysis_request(match: Match, keypoints: List[List[int]]) -> dict:
     token = create_access_token(
         {"iss": "backend", "aud": "cli", "scope": "internal"},
         use_internal=True
