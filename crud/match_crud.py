@@ -15,24 +15,58 @@ def create_match(data: MatchCreate) -> str:
     return str(result.inserted_id)
 
 
-def get_match_by_id(match_id: str) -> Optional[Match]:
-    match = match_collection.find_one({"_id": ObjectId(match_id)})
-    if match:
-        return Match(**match)
+def find_match_by(filters: Dict[str, Any]) -> Optional[Match]:
+    match_doc = match_collection.find_one(filters)
+    if match_doc:
+        return Match(
+            id=match_doc["_id"],
+            date=match_doc["date"],
+            video_id=match_doc["video_id"],
+            user_id=match_doc["user_id"],
+            video_url=match_doc["video_url"],
+            status=match_doc["status"],
+            annotated_url=match_doc.get("annotated_url", None),
+            data_url=match_doc.get("data_url", None),
+        )
     return None
 
 
+def update_match_by(filters: Dict[str, Any], update_data: Dict[str, Any]) -> bool:
+    result = match_collection.update_one(filters, {"$set": update_data})
+    return result.modified_count > 0
+
+
+def find_all_match_by(filters: Dict[str, Any]) -> List[Match]:
+    matches_docs = match_collection.find(filters)
+    matches = []
+    for match_doc in matches_docs:
+        match = Match(
+            id=match_doc["_id"],
+            date=match_doc["date"],
+            video_id=match_doc["video_id"],
+            user_id=match_doc["user_id"],
+            video_url=match_doc["video_url"],
+            status=match_doc["status"],
+            annotated_url=match_doc.get("annotated_url", None),
+            data_url=match_doc.get("data_url", None),
+        )
+        matches.append(match)
+    return matches
+
+
+def get_match_by_id(match_id: str) -> Optional[Match]:
+    return find_match_by({"_id": ObjectId(match_id)})
+
+
 def get_matches_by_user(user_id: str) -> List[Match]:
-    matches = match_collection.find({"user_id": user_id})
-    return [Match(**m) for m in matches]
+    return find_all_match_by({"user_id": user_id})
 
 
 def update_match_status(match_id: str, new_status: MATCH_STATUS) -> bool:
-    result = match_collection.update_one(
+    return update_match_by(
         {"_id": ObjectId(match_id)},
-        {"$set": {"status": new_status}},
+        {"status": new_status},
     )
-    return result.modified_count > 0
 
 
 def delete_match(match_id: str) -> bool:
