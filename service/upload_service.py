@@ -30,7 +30,7 @@ def generate_download_url(object_key, expiration=3600):
     s3_client = get_s3_client()
     response = s3_client.generate_presigned_url(
         'get_object',
-        Params={'Bucket': settings.bucket_name, 'Key': object_key},
+        Params={'Bucket': settings.aws_s3_videos_bucket, 'Key': object_key},
         ExpiresIn=expiration
     )
     return response
