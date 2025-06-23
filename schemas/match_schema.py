@@ -7,7 +7,7 @@ from typing import Literal, List, Optional
 MATCH_STATUS = Literal["pending", "queued", "processing", "finished"]
 
 class MatchStatusUpdate(BaseModel):
-    match_id: bson.ObjectId
+    match_id: str
     status: MATCH_STATUS
 
 class MatchAnalysisRequest(BaseModel):
