@@ -5,7 +5,7 @@ from database import database
 from schemas.match_schema import MatchCreate, Match, MatchStatusUpdate, MATCH_STATUS
 from datetime import datetime
 
-match_collection: Collection = database.get_collection("matches")
+match_collection = database.get_collection("matches")
 
 
 def create_match(data: MatchCreate) -> str:
