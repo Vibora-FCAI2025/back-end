@@ -4,10 +4,11 @@ import bson
 from pydantic import BaseModel
 from typing import Any, Literal, List, Optional
 
+MATCH_STATUS = Literal["queued", "processing", "finished"]
 
 class MatchStatusUpdate(BaseModel):
     match_id: bson.ObjectId
-    status: Literal["queued", "processing", "finished"]
+    status: MATCH_STATUS
 
 class MatchResponse(BaseModel):
     id: bson.ObjectId
@@ -23,7 +24,7 @@ class Match(BaseModel):
     video_id: bson.ObjectId
     user_id: bson.ObjectId
     date: datetime
-    status: Literal["queued", "processing", "finished"]
+    status: MATCH_STATUS
     video_url: str
     annotated_url: Optional[str] = None
     data_url: Optional[str] = None
