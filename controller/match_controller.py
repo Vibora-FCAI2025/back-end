@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter, Depends
 from dependencies.auth import is_auth
 from dependencies.internal import is_internal
-from schemas.match_schema import MatchStatusUpdate, MatchAnalysisRequest, Match
+from schemas.match_schema import MatchStatusUpdate, MatchAnalysisRequest, Match, MatchResponse
 from schemas.user_schema import User
 from service.analysis_service import analyze_match
 from service.match_service import change_match_status, get_matches, get_user_match
@@ -34,11 +34,13 @@ def analyse_video(match: MatchAnalysisRequest, user: User = Depends(is_auth)):
     return {"match_id": match_id}
 
 
-@router.get("/match_history", response_model=List[Match])
+@router.get("/match_history", response_model=List[MatchResponse])
 def get_match_history(user: User = Depends(is_auth)):
-    return get_matches(user)
+    matches = get_matches(user)
+    return [MatchResponse(**match.model_dump()) for match in matches]
 
 
-@router.get("/match/{match_id}", response_model=Match)
+@router.get("/match/{match_id}", response_model=MatchResponse)
 def get_match(match_id: str, user: User = Depends(is_auth)):
-    return get_user_match(match_id, user)
+    match = get_user_match(match_id, user)
+    return MatchResponse(**match.model_dump())
