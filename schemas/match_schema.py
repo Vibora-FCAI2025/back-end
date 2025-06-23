@@ -30,6 +30,11 @@ class Match(BaseModel):
     class Config:
         arbitrary_types_allowed = True
 
+class MatchResponse(BaseModel):
+    id: str
+    status: MATCH_STATUS
+    video_url: str
+
 
 class MatchCreate(BaseModel):
     video_id: bson.ObjectId
