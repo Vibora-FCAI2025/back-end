@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter, Depends
 from dependencies.auth import is_auth
 from dependencies.internal import is_internal
-from schemas.match_schema import MatchResponse, MatchStatusUpdate, MatchAnalysisRequest, Match
+from schemas.match_schema import MatchStatusUpdate, MatchAnalysisRequest, Match
 from schemas.user_schema import User
 from service.analysis_service import analyze_match
 from service.match_service import change_match_status, get_matches, get_user_match

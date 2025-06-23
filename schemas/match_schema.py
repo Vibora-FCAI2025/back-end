@@ -10,11 +10,6 @@ class MatchStatusUpdate(BaseModel):
     match_id: bson.ObjectId
     status: MATCH_STATUS
 
-class MatchResponse(BaseModel):
-    id: bson.ObjectId
-    data: Any
-    annotated_video_url: str
-
 class MatchAnalysisRequest(BaseModel):
     video_id: bson.ObjectId
     keypoints: List[List[int, int]]
