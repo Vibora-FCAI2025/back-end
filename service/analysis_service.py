@@ -17,9 +17,9 @@ settings = get_settings()
 def analyze_match(match: MatchAnalysisRequest, user: User):
     match_create = MatchCreate(
         video_id=ObjectId(match.video_id),
-        user_id=user.user_id,
+        user_id=user.id,
         date=datetime.now(),
-        download_url=generate_download_url(match.video_id)
+        video_url=generate_download_url(match.video_id)
     )
 
     match_id = create_match(match_create)
