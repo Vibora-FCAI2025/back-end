@@ -2,7 +2,7 @@ from pymongo.collection import Collection
 from bson import ObjectId
 from typing import Optional, List, Literal
 from database import database
-from schemas.match_schema import MatchCreate, Match, MatchStatusUpdate
+from schemas.match_schema import MatchCreate, Match, MatchStatusUpdate, MATCH_STATUS
 from datetime import datetime
 
 match_collection: Collection = database.get_collection("matches")
@@ -27,7 +27,7 @@ def get_matches_by_user(user_id: str) -> List[Match]:
     return [Match(**m) for m in matches]
 
 
-def update_match_status(match_id: str, new_status: Literal["queued", "processing", "finished"]) -> bool:
+def update_match_status(match_id: str, new_status: MATCH_STATUS) -> bool:
     result = match_collection.update_one(
         {"_id": ObjectId(match_id)},
         {"$set": {"status": new_status}},
