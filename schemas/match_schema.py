@@ -1,7 +1,7 @@
 from datetime import datetime
 
 import bson
-from pydantic import BaseModel
+from pydantic import BaseModel, field_serializer
 from typing import Literal, List, Optional
 
 MATCH_STATUS = Literal["pending", "queued", "processing", "finished"]
@@ -29,6 +29,10 @@ class Match(BaseModel):
 
     class Config:
         arbitrary_types_allowed = True
+
+    @field_serializer('id')
+    def serialize_id(self, value: bson.ObjectId) -> str:
+        return str(value)
 
 class MatchResponse(BaseModel):
     id: str
