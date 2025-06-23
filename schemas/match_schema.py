@@ -4,7 +4,7 @@ import bson
 from pydantic import BaseModel
 from typing import Any, Literal, List, Optional
 
-MATCH_STATUS = Literal["queued", "processing", "finished"]
+MATCH_STATUS = Literal["pending", "queued", "processing", "finished"]
 
 class MatchStatusUpdate(BaseModel):
     match_id: bson.ObjectId
