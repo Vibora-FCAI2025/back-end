@@ -13,7 +13,4 @@ def is_internal(credentials: HTTPAuthorizationCredentials = Depends(bearer_schem
     except ValueError:
         raise HTTPException(status_code=403, detail="Invalid token")
 
-    if payload.get("iss") != "server-a" or payload.get("aud") != "server-b":
-        raise HTTPException(status_code=403, detail="Invalid token claims")
-
     return payload
