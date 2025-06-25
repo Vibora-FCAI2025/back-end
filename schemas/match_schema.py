@@ -23,9 +23,6 @@ class Match(BaseModel):
     user_id: bson.ObjectId
     date: datetime
     status: MATCH_STATUS
-    video_url: str
-    annotated_url: Optional[str] = None
-    data_url: Optional[str] = None
 
     class Config:
         arbitrary_types_allowed = True
@@ -44,7 +41,6 @@ class MatchCreate(BaseModel):
     video_id: bson.ObjectId
     user_id: bson.ObjectId
     date: datetime
-    video_url: str
 
     class Config:
         arbitrary_types_allowed = True
