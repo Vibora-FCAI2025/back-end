@@ -22,13 +22,12 @@ def analyze_match(analysis: MatchAnalysisRequest, user: User):
     )
 
     match_id = create_match(match_create)
-    match = get_match_by_id(match_id)
-    send_analysis_request(match, analysis.keypoints)
+    send_analysis_request(match_id, analysis.video_id, user.id, analysis.keypoints)
 
     return match_id
 
 
-def send_analysis_request(match: Match, keypoints: List[List[int]]) -> dict:
+def send_analysis_request(match_id: str, video_id: str, user_id, keypoints: List[List[int]]) -> dict:
     token = create_access_token({}, use_internal=True)
 
     headers = {
@@ -41,9 +40,10 @@ def send_analysis_request(match: Match, keypoints: List[List[int]]) -> dict:
         url,
         headers=headers,
         json={
-            "user_id": str(match.user_id),
-            "match_id": str(match.id),
-            "video_path": generate_download_url(match.video_id),
+            "user_id": str(user_id),
+            "match_id": str(match_id),
+            "video_id": str(video_id),
+            "video_path": generate_download_url(video_id),
             "court_points": keypoints
         },
         timeout=10
