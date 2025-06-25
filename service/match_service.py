@@ -16,7 +16,6 @@ def get_matches(user: User):
     return matches
 
 
-# In services/match_service.py
 def get_user_match(match_id: str, user: User) -> Match:
     match = get_match_by_id(match_id)
     if not match:
