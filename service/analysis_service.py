@@ -43,7 +43,7 @@ def send_analysis_request(match: Match, keypoints: List[List[int]]) -> dict:
         json={
             "user_id": str(match.user_id),
             "match_id": str(match.id),
-            "video_path": match.video_url,
+            "video_path": generate_download_url(match.video_id),
             "court_points": keypoints
         },
         timeout=10
