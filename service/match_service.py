@@ -6,10 +6,9 @@ from service.upload_service import generate_download_url
 
 
 def change_match_status(match_status: MatchStatusUpdate):
-    match = get_match_by_id(match_status.match_id)
-    if not match:
+    is_updated = update_match_status(match_status.match_id, match_status.status)
+    if not is_updated:
         raise HTTPException(status_code=404, detail="Match not found")
-    update_match_status(match_status.match_id, match_status.status)
 
 
 def get_matches(user: User):
@@ -24,6 +23,7 @@ def get_user_match(match_id: str, user: User) -> Match:
     if match.user_id != user.id:
         raise HTTPException(status_code=403, detail="Forbidden")
     return match
+
 
 def generate_match_response(match: Match) -> MatchResponse:
     match_dict = match.model_dump()
