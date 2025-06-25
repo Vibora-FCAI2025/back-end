@@ -1,5 +1,6 @@
+import bson
 from fastapi import HTTPException
-from crud.match_crud import get_match_by_id, update_match_status, get_matches_by_user
+from crud.match_crud import get_match_by_id, update_match_status, get_matches_by_user, update_match_by
 from schemas.match_schema import MatchStatusUpdate, Match, MatchResponse
 from schemas.user_schema import User
 from service.upload_service import generate_download_url
@@ -7,6 +8,18 @@ from service.upload_service import generate_download_url
 
 def change_match_status(match_status: MatchStatusUpdate):
     is_updated = update_match_status(match_status.match_id, match_status.status)
+    if not is_updated:
+        raise HTTPException(status_code=404, detail="Match not found")
+
+
+def match_is_analyzed(match_id: str):
+    is_updated = update_match_by({'_id': bson.ObjectId(match_id)}, {"is_analyzed": True})
+    if not is_updated:
+        raise HTTPException(status_code=404, detail="Match not found")
+
+
+def match_is_annotated(match_id: str):
+    is_updated = update_match_by({'_id': bson.ObjectId(match_id)}, {"is_annotated": True})
     if not is_updated:
         raise HTTPException(status_code=404, detail="Match not found")
 

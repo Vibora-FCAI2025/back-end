@@ -6,7 +6,8 @@ from dependencies.internal import is_internal
 from schemas.match_schema import MatchStatusUpdate, MatchAnalysisRequest, Match, MatchResponse
 from schemas.user_schema import User
 from service.analysis_service import analyze_match
-from service.match_service import change_match_status, get_matches, get_user_match, generate_match_response
+from service.match_service import change_match_status, get_matches, get_user_match, generate_match_response, \
+    match_is_analyzed, match_is_annotated
 from service.upload_service import generate_upload_url
 
 router = APIRouter()
@@ -44,3 +45,13 @@ def get_match_history(user: User = Depends(is_auth)):
 def get_match(match_id: str, user: User = Depends(is_auth)):
     match = get_user_match(match_id, user)
     return  generate_match_response(match)
+
+@router.post("/match/analyzed")
+def match_analyzed(match_id: str, auth=Depends(is_internal)):
+    match_is_analyzed(match_id)
+    return 200
+
+@router.post("/match/annotated")
+def match_annotated(match_id: str, auth=Depends(is_internal)):
+    match_is_annotated(match_id)
+    return 200
