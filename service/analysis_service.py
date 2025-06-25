@@ -43,7 +43,7 @@ def send_analysis_request(match: Match, keypoints: List[List[int]]) -> dict:
         headers=headers,
         json={
             "user_id": str(match.user_id),
-            "video_id": str(match.video_id),
+            "match_id": str(match.id),
             "video_path": match.video_url,
             "court_points": keypoints
         },
