@@ -1,7 +1,8 @@
 from fastapi import HTTPException
 from crud.match_crud import get_match_by_id, update_match_status, get_matches_by_user
-from schemas.match_schema import MatchStatusUpdate, Match
+from schemas.match_schema import MatchStatusUpdate, Match, MatchResponse
 from schemas.user_schema import User
+from service.upload_service import generate_download_url
 
 
 def change_match_status(match_status: MatchStatusUpdate):
@@ -23,3 +24,12 @@ def get_user_match(match_id: str, user: User) -> Match:
     if match.user_id != user.id:
         raise HTTPException(status_code=403, detail="Forbidden")
     return match
+
+def generate_match_response(match: Match) -> MatchResponse:
+    match_dict = match.model_dump()
+    match_dict["video_url"] = generate_download_url(match.video_id)
+    if match.is_annotated:
+        match_dict["annotated_video_url"] = generate_download_url(match.annotated_video_id)
+    if match.is_analyzed:
+        match_dict["analysis_data_url"] = generate_download_url(match.data_id)
+    return MatchResponse(**match_dict)

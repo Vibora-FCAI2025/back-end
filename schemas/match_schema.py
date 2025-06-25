@@ -23,6 +23,8 @@ class Match(BaseModel):
     user_id: bson.ObjectId
     date: datetime
     status: MATCH_STATUS
+    is_annotated: bool = False
+    is_analyzed: bool = False
 
     class Config:
         arbitrary_types_allowed = True
@@ -31,10 +33,13 @@ class Match(BaseModel):
     def serialize_id(self, value: bson.ObjectId) -> str:
         return str(value)
 
+
 class MatchResponse(BaseModel):
     id: str
     status: MATCH_STATUS
     video_url: str
+    annotated_video_url: Optional[str]
+    analysis_data_url: Optional[str]
 
 
 class MatchCreate(BaseModel):
