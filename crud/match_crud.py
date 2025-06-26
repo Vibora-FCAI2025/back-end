@@ -23,10 +23,9 @@ def find_match_by(filters: Dict[str, Any]) -> Optional[Match]:
             date=match_doc["date"],
             video_id=match_doc["video_id"],
             user_id=match_doc["user_id"],
-            video_url=match_doc["video_url"],
             status=match_doc["status"],
-            annotated_url=match_doc.get("annotated_url", None),
-            data_url=match_doc.get("data_url", None),
+            is_annotated=match_doc.get("is_annotated", False),
+            is_analyzed=match_doc.get("is_analyzed", False),
         )
     return None
 
