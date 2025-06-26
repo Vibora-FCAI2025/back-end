@@ -42,6 +42,15 @@ class MatchResponse(BaseModel):
     analysis_data_url: Optional[str]
 
 
+class MatchID(BaseModel):
+    match_id: str
+
+
+class UploadResponse(BaseModel):
+    upload_url: str
+    video_id: str
+
+
 class MatchCreate(BaseModel):
     video_id: bson.ObjectId
     user_id: bson.ObjectId

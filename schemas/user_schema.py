@@ -25,3 +25,7 @@ class NewUser(BaseModel):
     username: str
     password: str
     is_verified: bool = False
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str
