@@ -24,17 +24,19 @@ def get_match_history(user: User = Depends(is_auth)):
     return [MatchResponse(**match.model_dump()) for match in matches]
 
 
-@router.get("/match/{match_id}", response_model=MatchResponse)
+@router.get("/{match_id}", response_model=MatchResponse)
 def get_match(match_id: str, user: User = Depends(is_auth)):
     match = get_user_match(match_id, user)
     return  generate_match_response(match)
 
-@router.post("/match/analyzed")
-def match_analyzed(match_id: str, auth=Depends(is_internal)):
+@router.post("/analyzed")
+def mark_match_as_analyzed(data: dict, auth=Depends(is_internal)):
+    match_id = data["match_id"]
     match_is_analyzed(match_id)
     return 200
 
-@router.post("/match/annotated")
-def match_annotated(match_id: str, auth=Depends(is_internal)):
+@router.post("/annotated")
+def mark_match_as_annotated(data: dict, auth=Depends(is_internal)):
+    match_id = data["match_id"]
     match_is_annotated(match_id)
     return 200
