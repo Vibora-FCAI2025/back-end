@@ -42,7 +42,7 @@ def generate_match_response(match: Match) -> MatchResponse:
     match_dict = match.model_dump()
     match_dict["video_url"] = generate_download_url(match.video_id)
     if match.is_annotated:
-        match_dict["annotated_video_url"] = generate_download_url(match.annotated_video_id)
+        match_dict["annotated_video_url"] = generate_download_url(f"{match.video_id}_annotated")
     if match.is_analyzed:
-        match_dict["analysis_data_url"] = generate_download_url(match.data_id)
+        match_dict["analysis_data_url"] = generate_download_url(f"{match.video_id}_data")
     return MatchResponse(**match_dict)
