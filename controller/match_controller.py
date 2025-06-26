@@ -21,7 +21,7 @@ def update_status(video_data: MatchStatusUpdate, auth=Depends(is_internal)):
 @router.get("/match_history", response_model=List[MatchResponse])
 def get_match_history(user: User = Depends(is_auth)):
     matches = get_matches(user)
-    return [MatchResponse(**match.model_dump()) for match in matches]
+    return [generate_match_response(match) for match in matches]
 
 
 @router.get("/{match_id}", response_model=MatchResponse)

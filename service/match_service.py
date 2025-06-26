@@ -39,10 +39,15 @@ def get_user_match(match_id: str, user: User) -> Match:
 
 
 def generate_match_response(match: Match) -> MatchResponse:
-    match_dict = match.model_dump()
-    match_dict["video_url"] = generate_download_url(match.video_id)
+    resp = MatchResponse(
+        id=str(match.id),
+        status=match.status,
+        video_url=generate_download_url(str(match.video_id)),
+        annotated_video_url=None,
+        analysis_data_url=None
+    )
     if match.is_annotated:
-        match_dict["annotated_video_url"] = generate_download_url(f"{match.video_id}_annotated")
+        resp.annotated_video_url = generate_download_url(f"{match.video_id}_annotated")
     if match.is_analyzed:
-        match_dict["analysis_data_url"] = generate_download_url(f"{match.video_id}_data")
-    return MatchResponse(**match_dict)
+        resp.analysis_data_url = generate_download_url(f"{match.video_id}_data")
+    return  resp

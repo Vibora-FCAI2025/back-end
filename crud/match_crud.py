@@ -44,10 +44,9 @@ def find_all_match_by(filters: Dict[str, Any]) -> List[Match]:
             date=match_doc["date"],
             video_id=match_doc["video_id"],
             user_id=match_doc["user_id"],
-            video_url=match_doc["video_url"],
             status=match_doc["status"],
-            annotated_url=match_doc.get("annotated_url", None),
-            data_url=match_doc.get("data_url", None),
+            is_annotated=match_doc.get("is_annotated", False),
+            is_analyzed=match_doc.get("is_analyzed", False),
         )
         matches.append(match)
     return matches
@@ -58,7 +57,7 @@ def get_match_by_id(match_id: str) -> Optional[Match]:
 
 
 def get_matches_by_user(user_id: str) -> List[Match]:
-    return find_all_match_by({"user_id": user_id})
+    return find_all_match_by({"user_id": ObjectId(user_id)})
 
 
 def update_match_status(match_id: str, new_status: MATCH_STATUS) -> bool:
