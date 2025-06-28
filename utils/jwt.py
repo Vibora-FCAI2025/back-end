@@ -6,7 +6,7 @@ from config import get_settings
 settings = get_settings()
 
 
-def create_access_token(data: dict, expires_delta: timedelta = None, *, use_internal=False) -> str:
+def create_access_token(data: dict, expires_delta: timedelta | None = None, *, use_internal=False) -> str:
     to_encode = data.copy()
     expire = datetime.now() + (expires_delta or timedelta(minutes=settings.jwt_expire_minutes))
     to_encode.update({"exp": expire})
