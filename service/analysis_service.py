@@ -44,7 +44,7 @@ def send_analysis_request(match_id: str, video_id: str, user_id, keypoints: List
             "user_id": str(user_id),
             "match_id": str(match_id),
             "video_id": str(video_id),
-            "video_path": generate_download_url(video_id),
+            "video_path": generate_download_url(str(video_id)+".mp4"),
             "court_points": keypoints
         },
         timeout=10
