@@ -56,7 +56,7 @@ def generate_match_response(match: Match) -> MatchResponse:
         analysis_data_url=None
     )
     if match.is_screenshot_generated:
-        resp.match_screenshot_url = generate_download_url(f"{match.video_id}_screenshot.png")
+        resp.match_screenshot_url = generate_download_url(f"{match.video_id}_screenshot.jpg")
     if match.is_annotated:
         resp.annotated_video_url = generate_download_url(f"{match.video_id}_annotated.mp4")
     if match.is_analyzed:
