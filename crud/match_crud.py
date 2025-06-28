@@ -26,6 +26,7 @@ def find_match_by(filters: Dict[str, Any]) -> Optional[Match]:
             status=match_doc["status"],
             is_annotated=match_doc.get("is_annotated", False),
             is_analyzed=match_doc.get("is_analyzed", False),
+            is_screenshot_generated=match_doc.get("is_screenshot_generated", False),
         )
     return None
 
@@ -47,6 +48,7 @@ def find_all_match_by(filters: Dict[str, Any]) -> List[Match]:
             status=match_doc["status"],
             is_annotated=match_doc.get("is_annotated", False),
             is_analyzed=match_doc.get("is_analyzed", False),
+            is_screenshot_generated=match_doc.get("is_screenshot_generated", False),
         )
         matches.append(match)
     return matches

@@ -24,6 +24,12 @@ def match_is_annotated(match_id: str):
         raise HTTPException(status_code=404, detail="Match not found")
 
 
+def match_screenshot_generated(match_id: str):
+    is_updated = update_match_by({'_id': bson.ObjectId(match_id)}, {"is_screenshot_generated": True})
+    if not is_updated:
+        raise HTTPException(status_code=404, detail="Match not found")
+
+
 def get_matches(user: User):
     matches = get_matches_by_user(str(user.id))
     return matches
@@ -44,9 +50,12 @@ def generate_match_response(match: Match) -> MatchResponse:
         status=match.status,
         date=match.date,
         video_url=generate_download_url(str(match.video_id)),
+        match_screenshot_url=None,
         annotated_video_url=None,
         analysis_data_url=None
     )
+    if match.is_screenshot_generated:
+        resp.match_screenshot_url = generate_download_url(f"{match.video_id}_screenshot")
     if match.is_annotated:
         resp.annotated_video_url = generate_download_url(f"{match.video_id}_annotated")
     if match.is_analyzed:

@@ -25,6 +25,7 @@ class Match(BaseModel):
     status: MATCH_STATUS
     is_annotated: bool = False
     is_analyzed: bool = False
+    is_screenshot_generated: bool = False
 
     class Config:
         arbitrary_types_allowed = True
@@ -39,6 +40,7 @@ class MatchResponse(BaseModel):
     status: MATCH_STATUS
     date: datetime
     video_url: str
+    match_screenshot_url: Optional[str]
     annotated_video_url: Optional[str]
     analysis_data_url: Optional[str]
 
