@@ -14,6 +14,7 @@ class MatchStatusUpdate(BaseModel):
 
 class MatchAnalysisRequest(BaseModel):
     video_id: str
+    title: str
     keypoints: List[List[int]]
 
 
@@ -21,6 +22,7 @@ class Match(BaseModel):
     id: bson.ObjectId
     video_id: bson.ObjectId
     user_id: bson.ObjectId
+    title: str
     date: datetime
     status: MATCH_STATUS
     is_annotated: bool = False
@@ -37,6 +39,7 @@ class Match(BaseModel):
 
 class MatchResponse(BaseModel):
     id: str
+    title: str
     status: MATCH_STATUS
     date: datetime
     video_url: str
@@ -57,6 +60,7 @@ class UploadResponse(BaseModel):
 class MatchCreate(BaseModel):
     video_id: bson.ObjectId
     user_id: bson.ObjectId
+    title: str
     date: datetime
 
     class Config:

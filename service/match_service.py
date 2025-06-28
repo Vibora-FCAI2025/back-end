@@ -47,17 +47,18 @@ def get_user_match(match_id: str, user: User) -> Match:
 def generate_match_response(match: Match) -> MatchResponse:
     resp = MatchResponse(
         id=str(match.id),
+        title=match.title,
         status=match.status,
         date=match.date,
-        video_url=generate_download_url(str(match.video_id)),
+        video_url=generate_download_url(str(match.video_id) + ".mp4"),
         match_screenshot_url=None,
         annotated_video_url=None,
         analysis_data_url=None
     )
     if match.is_screenshot_generated:
-        resp.match_screenshot_url = generate_download_url(f"{match.video_id}_screenshot")
+        resp.match_screenshot_url = generate_download_url(f"{match.video_id}_screenshot.png")
     if match.is_annotated:
-        resp.annotated_video_url = generate_download_url(f"{match.video_id}_annotated")
+        resp.annotated_video_url = generate_download_url(f"{match.video_id}_annotated.mp4")
     if match.is_analyzed:
-        resp.analysis_data_url = generate_download_url(f"{match.video_id}_data")
+        resp.analysis_data_url = generate_download_url(f"{match.video_id}_data.csv")
     return  resp

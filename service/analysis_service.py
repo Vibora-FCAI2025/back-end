@@ -18,6 +18,7 @@ def analyze_match(analysis: MatchAnalysisRequest, user: User):
     match_create = MatchCreate(
         video_id=ObjectId(analysis.video_id),
         user_id=user.id,
+        title=analysis.title,
         date=datetime.now()
     )
 

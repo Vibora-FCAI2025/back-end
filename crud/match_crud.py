@@ -20,6 +20,7 @@ def find_match_by(filters: Dict[str, Any]) -> Optional[Match]:
     if match_doc:
         return Match(
             id=match_doc["_id"],
+            title=match_doc.get("title", "Untitled Match"),
             date=match_doc["date"],
             video_id=match_doc["video_id"],
             user_id=match_doc["user_id"],
@@ -42,6 +43,7 @@ def find_all_match_by(filters: Dict[str, Any]) -> List[Match]:
     for match_doc in matches_docs:
         match = Match(
             id=match_doc["_id"],
+            title=match_doc.get("title", "Untitled Match"),
             date=match_doc["date"],
             video_id=match_doc["video_id"],
             user_id=match_doc["user_id"],

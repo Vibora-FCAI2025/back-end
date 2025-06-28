@@ -13,7 +13,7 @@ router = APIRouter()
 @router.get("/get-upload", response_model=UploadResponse)
 def get_upload(user: User = Depends(is_auth)):
     video_id = bson.ObjectId()
-    upload_url = generate_upload_url(video_id)
+    upload_url = generate_upload_url(str(video_id) + ".mp4")
     return UploadResponse(video_id=str(video_id), upload_url=upload_url)
 
 
