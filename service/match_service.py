@@ -42,6 +42,7 @@ def generate_match_response(match: Match) -> MatchResponse:
     resp = MatchResponse(
         id=str(match.id),
         status=match.status,
+        date=match.date,
         video_url=generate_download_url(str(match.video_id)),
         annotated_video_url=None,
         analysis_data_url=None

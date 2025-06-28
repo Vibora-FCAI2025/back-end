@@ -37,6 +37,7 @@ class Match(BaseModel):
 class MatchResponse(BaseModel):
     id: str
     status: MATCH_STATUS
+    date: datetime
     video_url: str
     annotated_video_url: Optional[str]
     analysis_data_url: Optional[str]
