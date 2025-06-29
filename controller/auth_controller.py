@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from schemas.user_schema import UserRegister, UserLogin
+from schemas.user_schema import UserRegister, UserLogin, TokenResponse
 from schemas.otp_schema import OTPVerify
 from service import auth_service, otp_service
 from fastapi import HTTPException
@@ -20,7 +20,7 @@ async def verify_otp(data: OTPVerify):
     raise HTTPException(status_code=400, detail="Invalid OTP")
 
 
-@router.post("/login", responses={
+@router.post("/login", response_model=TokenResponse, responses={
     401: {"description": "Invalid credentials"},
     403: {"description": "User not verified"},
     404: {"description": "User not found"}
