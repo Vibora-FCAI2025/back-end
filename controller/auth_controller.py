@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
-from schemas.user_schema import UserRegister, UserLogin, TokenResponse, ChangePassword, User
+from schemas.user_schema import UserRegister, UserLogin, TokenResponse, ChangePassword, User, NotificationSettings
 from schemas.otp_schema import OTPVerify
-from service import auth_service, otp_service
+from service import auth_service, otp_service, notification_service
 from dependencies.auth import is_auth
 
 router = APIRouter()
@@ -42,3 +42,11 @@ def change_password(
     current_user: User = Depends(is_auth)
 ):
     return auth_service.change_password(str(current_user.id), password_data)
+
+
+@router.put("/notification-settings")
+def toggle_email_notifications(
+    settings: NotificationSettings,
+    current_user: User = Depends(is_auth)
+):
+    return notification_service.update_email_notifications(str(current_user.id), settings)

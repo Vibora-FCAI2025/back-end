@@ -19,7 +19,7 @@ def send_otp_email(receiver_email: str, otp: str):
     msg.attach(MIMEText(body, "plain"))
 
     try:
-        server = smtplib.SMTP(settings.smtp_server, settings.smtp_port)
+        server = smtplib.SMTP(settings.smtp_server, int(settings.smtp_port))
         server.starttls()
         server.login(settings.sender_email, settings.sender_password)
         server.sendmail(settings.sender_email, receiver_email, msg.as_string())
@@ -27,3 +27,25 @@ def send_otp_email(receiver_email: str, otp: str):
         print(f"OTP sent to {receiver_email}")
     except Exception as e:
         print(f"Failed to send email: {e}")
+
+
+def send_email(receiver_email: str, subject: str, message: str):
+    """Send a generic email to the user"""
+    msg = MIMEMultipart()
+    msg["From"] = settings.sender_email
+    msg["To"] = receiver_email
+    msg["Subject"] = subject
+
+    msg.attach(MIMEText(message, "plain"))
+
+    try:
+        server = smtplib.SMTP(settings.smtp_server, int(settings.smtp_port))
+        server.starttls()
+        server.login(settings.sender_email, settings.sender_password)
+        server.sendmail(settings.sender_email, receiver_email, msg.as_string())
+        server.quit()
+        print(f"Email sent to {receiver_email}")
+        return True
+    except Exception as e:
+        print(f"Failed to send email: {e}")
+        return False

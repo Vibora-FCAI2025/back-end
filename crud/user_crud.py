@@ -11,7 +11,8 @@ def create_user(user_data: NewUser) -> bson.ObjectId:
         "email": user_data.email,
         "username": user_data.username,
         "password": user_data.password,
-        "is_verified": False
+        "is_verified": False,
+        "email_notifications": True
     }
     result = user_collection.insert_one(user_dict)
     return result.inserted_id
@@ -25,7 +26,8 @@ def find_user_by(filters: Dict[str, Any]) -> Optional[User]:
             email=user_doc["email"],
             username=user_doc["username"],
             password=user_doc["password"],
-            is_verified=user_doc.get("is_verified", False)
+            is_verified=user_doc.get("is_verified", False),
+            email_notifications=user_doc.get("email_notifications", True)
         )
     return None
 

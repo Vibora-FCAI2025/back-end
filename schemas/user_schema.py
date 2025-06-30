@@ -28,6 +28,7 @@ class User(BaseModel):
     username: str
     password: str
     is_verified: bool
+    email_notifications: bool = True
 
     class Config:
         arbitrary_types_allowed = True
@@ -37,6 +38,9 @@ class NewUser(BaseModel):
     username: str
     password: str
     is_verified: bool = False
+
+class NotificationSettings(BaseModel):
+    email_notifications: bool
 
 class TokenResponse(BaseModel):
     access_token: str
