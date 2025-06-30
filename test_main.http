@@ -9,3 +9,27 @@ GET http://127.0.0.1:8000/hello/User
 Accept: application/json
 
 ###
+
+# Change Password - Replace YOUR_JWT_TOKEN with actual token from login
+PUT http://127.0.0.1:8000/change-password
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN
+
+{
+  "current_password": "oldpassword123",
+  "new_password": "newpassword456",
+  "confirm_password": "newpassword456"
+}
+
+###
+
+# Login example to get JWT token
+POST http://127.0.0.1:8000/login
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "password123"
+}
+
+###

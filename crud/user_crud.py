@@ -49,3 +49,8 @@ def update_user_by_email(email: str, update_data: Dict[str, Any]) -> bool:
 
 def verify_user(email: str) -> bool:
     return update_user_by_email(email, {"is_verified": True})
+
+
+def update_user_password(user_id: str, new_password: str) -> bool:
+    """Update user password by user ID"""
+    return update_user_by({"_id": bson.ObjectId(user_id)}, {"password": new_password})
