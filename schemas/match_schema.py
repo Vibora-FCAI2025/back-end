@@ -10,6 +10,7 @@ MATCH_STATUS = Literal["pending", "queued", "processing", "finished"]
 class MatchStatusUpdate(BaseModel):
     match_id: str
     status: MATCH_STATUS
+    notify: bool = True
 
 
 class MatchAnalysisRequest(BaseModel):

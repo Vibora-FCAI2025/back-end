@@ -12,19 +12,20 @@ def change_match_status(match_status: MatchStatusUpdate):
     if not is_updated:
         raise HTTPException(status_code=404, detail="Match not found")
     
-    match = get_match_by_id(match_status.match_id)
-    if not match:
-        raise HTTPException(status_code=404, detail="Match not found")
-    
-    # Send notification to the user
-    try:
-        message = f"Your match '{match.title}' status has been updated to {match_status.status}."
-        subject = f"Match Status Update: {match.title}"
+    # Send notification to the user only if notify_user is True
+    if match_status.notify:
+        match = get_match_by_id(match_status.match_id)
+        if not match:
+            raise HTTPException(status_code=404, detail="Match not found")
         
-        notify_user(str(match.user_id), message, subject)
-    except Exception as e:
-        # Log the error but don't fail the status update
-        print(f"Failed to send notification for match {match_status.match_id}: {str(e)}")
+        try:
+            message = f"Your match '{match.title}' status has been updated to {match_status.status}."
+            subject = f"Match Status Update: {match.title}"
+            
+            notify_user(str(match.user_id), message, subject)
+        except Exception as e:
+            # Log the error but don't fail the status update
+            print(f"Failed to send notification for match {match_status.match_id}: {str(e)}")
 
 
 def match_is_analyzed(match_id: str):
