@@ -2,7 +2,7 @@ import random
 from utils.email import send_otp_email
 from schemas.otp_schema import OTPVerify
 from crud.otp_crud import create_otp, get_otp, delete_otp
-from crud.user_crud import create_user, verify_user
+from crud.user_crud import create_user
 
 OTP_RANGE_LOW = 100000
 OTP_RANGE_HIGH = 999999
@@ -19,10 +19,9 @@ def send_otp(email: str):
     send_otp_email(email, otp)
 
 
-def verify_otp(data: OTPVerify) -> bool:
-    saved_otp = get_otp(data.email)
-    if saved_otp and saved_otp == data.otp:
-        verify_user(data.email)
-        delete_otp(data.email)
+def verify_otp(email: str, otp: str) -> bool:
+    saved_otp = get_otp(email)
+    if saved_otp and saved_otp == otp:
+        delete_otp(email)
         return True
     return False

@@ -45,3 +45,19 @@ class NotificationSettings(BaseModel):
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str
+
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+class ResetPasswordRequest(BaseModel):
+    email: EmailStr
+    otp: str
+    new_password: SecretStr
+    confirm_password: SecretStr
+    
+    @field_validator('confirm_password')
+    @classmethod
+    def passwords_match(cls, v, info):
+        if 'new_password' in info.data and v.get_secret_value() != info.data['new_password'].get_secret_value():
+            raise ValueError('New password and confirmation password do not match')
+        return v

@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from schemas.user_schema import UserRegister, UserLogin, TokenResponse, ChangePassword, User
+from schemas.user_schema import UserRegister, UserLogin, TokenResponse, ChangePassword, User, ForgotPasswordRequest, ResetPasswordRequest
 from schemas.otp_schema import OTPVerify
 from service import auth_service, otp_service
 from dependencies.auth import is_auth
@@ -15,9 +15,7 @@ def register(user: UserRegister):
 
 @router.post("/verify-otp")
 async def verify_otp(data: OTPVerify):
-    if otp_service.verify_otp(data):
-        return {"message": "User registered successfully"}
-    raise HTTPException(status_code=400, detail="Invalid OTP")
+    return auth_service.verify_user_with_otp(data)
 
 
 @router.post("/login", response_model=TokenResponse, responses={
@@ -42,6 +40,25 @@ def change_password(
     current_user: User = Depends(is_auth)
 ):
     return auth_service.change_password(str(current_user.id), password_data)
+
+
+@router.post("/forgot-password", responses={
+    200: {"description": "Password reset OTP sent to email"},
+    404: {"description": "User not found"},
+    403: {"description": "User not verified"}
+})
+def forgot_password(forgot_request: ForgotPasswordRequest):
+    return auth_service.initiate_forgot_password(forgot_request)
+
+
+@router.post("/reset-password", responses={
+    200: {"description": "Password reset successfully"},
+    400: {"description": "Invalid or expired OTP, or password validation error"},
+    404: {"description": "User not found"},
+    500: {"description": "Failed to update password"}
+})
+def reset_password(reset_request: ResetPasswordRequest):
+    return auth_service.reset_password(reset_request)
 
 
 

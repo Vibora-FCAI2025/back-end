@@ -1,9 +1,10 @@
-from schemas.user_schema import UserRegister, NewUser, UserLogin, ChangePassword
+from schemas.user_schema import UserRegister, NewUser, UserLogin, ChangePassword, ForgotPasswordRequest, ResetPasswordRequest
+from schemas.otp_schema import OTPVerify
 from utils.auth import hash_password, verify_password
 from utils.jwt import create_access_token
 from fastapi import HTTPException, status
-from crud.user_crud import create_user, get_user_by_email, get_user_by_id, update_user_password
-from service.otp_service import send_otp
+from crud.user_crud import create_user, get_user_by_email, get_user_by_id, update_user_password, verify_user
+from service.otp_service import send_otp, verify_otp
 
 
 def check_user_exists(email: str):
@@ -78,3 +79,64 @@ def change_password(user_id: str, password_data: ChangePassword):
         )
     
     return {"message": "Password changed successfully"}
+
+
+def initiate_forgot_password(forgot_request: ForgotPasswordRequest):
+    """Initiate forgot password process by sending OTP to user's email"""
+    user = get_user_by_email(forgot_request.email)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+    
+    if not user.is_verified:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="User account is not verified"
+        )
+    
+    send_otp(forgot_request.email)
+    return {"message": "Password reset OTP sent to your email"}
+
+
+def reset_password(reset_request: ResetPasswordRequest):
+    """Reset user password using OTP verification"""
+    # Verify the user exists
+    user = get_user_by_email(reset_request.email)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+    
+    # Verify OTP
+    if not verify_otp(reset_request.email, reset_request.otp):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid or expired OTP"
+        )
+    
+    # Hash the new password
+    new_hashed_password = hash_password(reset_request.new_password.get_secret_value())
+    
+    # Update password in database
+    success = update_user_password(str(user.id), new_hashed_password)
+    if not success:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to update password"
+        )
+    
+    return {"message": "Password reset successfully"}
+
+
+def verify_user_with_otp(data: OTPVerify):
+    """Verify OTP and mark user as verified"""
+    if verify_otp(data.email, data.otp):
+        verify_user(data.email)
+        return {"message": "User registered successfully"}
+    raise HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail="Invalid OTP"
+    )
