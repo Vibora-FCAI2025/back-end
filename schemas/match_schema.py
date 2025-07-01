@@ -49,6 +49,20 @@ class MatchResponse(BaseModel):
     analysis_data_url: Optional[str]
 
 
+class PaginationMetadata(BaseModel):
+    page: int
+    limit: int
+    total_items: int
+    total_pages: int
+    has_next: bool
+    has_previous: bool
+
+
+class PaginatedMatchResponse(BaseModel):
+    matches: List[MatchResponse]
+    pagination: PaginationMetadata
+
+
 class MatchID(BaseModel):
     match_id: str
 

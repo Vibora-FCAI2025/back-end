@@ -1,5 +1,5 @@
 from bson import ObjectId
-from typing import Optional, List, Dict, Any
+from typing import Optional, List, Dict, Any, Tuple
 from database import database
 from schemas.match_schema import MatchCreate, Match, MATCH_STATUS
 from datetime import datetime
@@ -56,12 +56,42 @@ def find_all_match_by(filters: Dict[str, Any]) -> List[Match]:
     return matches
 
 
+def find_paginated_matches_by(filters: Dict[str, Any], skip: int = 0, limit: int = 10) -> List[Match]:
+    matches_docs = match_collection.find(filters).sort("date", -1).skip(skip).limit(limit)
+    matches = []
+    for match_doc in matches_docs:
+        match = Match(
+            id=match_doc["_id"],
+            title=match_doc.get("title", "Untitled Match"),
+            date=match_doc["date"],
+            video_id=match_doc["video_id"],
+            user_id=match_doc["user_id"],
+            status=match_doc["status"],
+            is_annotated=match_doc.get("is_annotated", False),
+            is_analyzed=match_doc.get("is_analyzed", False),
+            is_screenshot_generated=match_doc.get("is_screenshot_generated", False),
+        )
+        matches.append(match)
+    return matches
+
+
+def count_matches_by(filters: Dict[str, Any]) -> int:
+    return match_collection.count_documents(filters)
+
+
 def get_match_by_id(match_id: str) -> Optional[Match]:
     return find_match_by({"_id": ObjectId(match_id)})
 
 
 def get_matches_by_user(user_id: str) -> List[Match]:
     return find_all_match_by({"user_id": ObjectId(user_id)})
+
+
+def get_paginated_matches_by_user(user_id: str, skip: int = 0, limit: int = 10) -> Tuple[List[Match], int]:
+    filters = {"user_id": ObjectId(user_id)}
+    matches = find_paginated_matches_by(filters, skip, limit)
+    total_count = count_matches_by(filters)
+    return matches, total_count
 
 
 def update_match_status(match_id: str, new_status: MATCH_STATUS) -> bool:

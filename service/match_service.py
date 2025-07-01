@@ -1,7 +1,8 @@
 import bson
+import math
 from fastapi import HTTPException
-from crud.match_crud import get_match_by_id, update_match_status, get_matches_by_user, update_match_by
-from schemas.match_schema import MatchStatusUpdate, Match, MatchResponse
+from crud.match_crud import get_match_by_id, update_match_status, get_matches_by_user, update_match_by, get_paginated_matches_by_user
+from schemas.match_schema import MatchStatusUpdate, Match, MatchResponse, PaginatedMatchResponse, PaginationMetadata
 from schemas.user_schema import User
 from service.upload_service import generate_download_url
 from service.notification_service import notify_user
@@ -49,6 +50,43 @@ def match_screenshot_generated(match_id: str):
 def get_matches(user: User):
     matches = get_matches_by_user(str(user.id))
     return matches
+
+
+def get_paginated_matches(user: User, page: int = 1, limit: int = 10) -> PaginatedMatchResponse:
+    # Validate pagination parameters
+    if page < 1:
+        raise HTTPException(status_code=400, detail="Page must be >= 1")
+    if limit < 1 or limit > 100:
+        raise HTTPException(status_code=400, detail="Limit must be between 1 and 100")
+    
+    # Calculate skip value
+    skip = (page - 1) * limit
+    
+    # Get paginated matches and total count
+    matches, total_count = get_paginated_matches_by_user(str(user.id), skip, limit)
+    
+    # Calculate pagination metadata
+    total_pages = math.ceil(total_count / limit) if total_count > 0 else 1
+    has_next = page < total_pages
+    has_previous = page > 1
+    
+    # Generate match responses
+    match_responses = [generate_match_response(match) for match in matches]
+    
+    # Create pagination metadata
+    pagination = PaginationMetadata(
+        page=page,
+        limit=limit,
+        total_items=total_count,
+        total_pages=total_pages,
+        has_next=has_next,
+        has_previous=has_previous
+    )
+    
+    return PaginatedMatchResponse(
+        matches=match_responses,
+        pagination=pagination
+    )
 
 
 def get_user_match(match_id: str, user: User) -> Match:

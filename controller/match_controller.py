@@ -1,11 +1,11 @@
 from typing import List
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from dependencies.auth import is_auth
 from dependencies.internal import is_internal
-from schemas.match_schema import MatchStatusUpdate, MatchResponse, MatchID
+from schemas.match_schema import MatchStatusUpdate, MatchResponse, MatchID, PaginatedMatchResponse
 from schemas.user_schema import User
 from service.match_service import change_match_status, get_matches, get_user_match, generate_match_response, \
-    match_is_analyzed, match_is_annotated, match_screenshot_generated
+    match_is_analyzed, match_is_annotated, match_screenshot_generated, get_paginated_matches
 
 router = APIRouter()
 
@@ -18,8 +18,17 @@ def update_status(video_data: MatchStatusUpdate, auth=Depends(is_internal)):
     return "Status changed successfully"
 
 
-@router.get("/match_history", response_model=List[MatchResponse])
-def get_match_history(user: User = Depends(is_auth)):
+@router.get("/match_history", response_model=PaginatedMatchResponse)
+def get_match_history(
+    user: User = Depends(is_auth),
+    page: int = Query(1, ge=1, description="Page number (starts from 1)"),
+    limit: int = Query(10, ge=1, le=100, description="Number of items per page (1-100)")
+):
+    return get_paginated_matches(user, page, limit)
+
+
+@router.get("/match_history/all", response_model=List[MatchResponse])
+def get_all_match_history(user: User = Depends(is_auth)):
     matches = get_matches(user)
     return [generate_match_response(match) for match in matches]
 
