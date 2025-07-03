@@ -41,6 +41,8 @@ class ChangePassword(BaseModel):
         if 'new_password' in info.data and v.get_secret_value() != info.data['new_password'].get_secret_value():
             raise ValueError('New password and confirmation password do not match')
         return v
+    
+
 
 class User(BaseModel):
     id: bson.ObjectId

@@ -1,10 +1,14 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from schemas.user_schema import UserRegister, UserLogin, TokenResponse, ChangePassword, User, ForgotPasswordRequest, ResetPasswordRequest
 from schemas.otp_schema import OTPVerify
 from service import auth_service, otp_service
 from dependencies.auth import is_auth
+import json
 
 router = APIRouter()
+
+
+
 
 
 @router.post("/register")
@@ -35,11 +39,43 @@ def login(user: UserLogin):
     404: {"description": "User not found"},
     500: {"description": "Failed to update password"}
 })
-def change_password(
-    password_data: ChangePassword,
+async def change_password(
+    request: Request,
     current_user: User = Depends(is_auth)
 ):
-    return auth_service.change_password(str(current_user.id), password_data)
+    try:
+        # Get the request body
+        body = await request.body()
+        
+        # Decode if it's bytes
+        if isinstance(body, bytes):
+            body_str = body.decode('utf-8')
+        else:
+            body_str = str(body)
+        
+        # Parse JSON
+        try:
+            data = json.loads(body_str)
+        except json.JSONDecodeError:
+            raise HTTPException(status_code=400, detail="Invalid JSON format")
+        
+        # Create ChangePassword object
+        password_data = ChangePassword(
+            current_password=data.get("current_password"),
+            new_password=data.get("new_password"),
+            confirm_password=data.get("confirm_password")
+        )
+        
+        return auth_service.change_password(str(current_user.id), password_data)
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error in change_password: {e}")
+        raise HTTPException(status_code=400, detail=f"Error processing request: {str(e)}")
+
+
+
 
 
 @router.post("/forgot-password", responses={
