@@ -1,11 +1,12 @@
 from typing import List
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, HTTPException
 from dependencies.auth import is_auth
 from dependencies.internal import is_internal
 from schemas.match_schema import MatchStatusUpdate, MatchResponse, MatchID, PaginatedMatchResponse
 from schemas.user_schema import User
 from service.match_service import change_match_status, get_matches, get_user_match, generate_match_response, \
     match_is_analyzed, match_is_annotated, match_screenshot_generated, get_paginated_matches
+from utils.validation import validate_object_id
 
 router = APIRouter()
 
@@ -35,6 +36,12 @@ def get_all_match_history(user: User = Depends(is_auth)):
 
 @router.get("/{match_id}", response_model=MatchResponse)
 def get_match(match_id: str, user: User = Depends(is_auth)):
+    # Validate match_id format before processing using centralized validation
+    try:
+        validate_object_id(match_id)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    
     match = get_user_match(match_id, user)
     return  generate_match_response(match)
 
